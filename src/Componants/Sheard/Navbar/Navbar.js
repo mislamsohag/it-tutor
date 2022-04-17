@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ActiveLink from './../ActiveLink/ActiveLink';
+import ActiveLink from './../../ActiveLink/ActiveLink';
+
 
 const Navbar = () => {
     return (
