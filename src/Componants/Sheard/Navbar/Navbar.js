@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ActiveLink from './../../ActiveLink/ActiveLink';
 
 
+
 const Navbar = () => {
     return (
         <div className='sticky top-0 bg-gray-100 px-20 py-5 flex justify-center md:justify-between'>

@@ -1,24 +1,34 @@
 import React from 'react';
-import Footer from '../Sheard/Footer/Footer';
-import Navbar from '../Sheard/Navbar/Navbar';
-
-
+import { Link } from 'react-router-dom';
+import SingleService from '../SingleService/SingleService';
+import useUsers from './../../Hook/useUsers';
 
 const Home = () => {
+
+    const users = useUsers('data.json')
+    // এখানে আমি Custom Hook useUsers() input করে তাতে URL/Data প্রপস্‌ আকারে পাঠিয়েছি। এবং তা হুক দিয়ে প্রসেস করে users নামে রিসিভ করেছি।
+
+    // console.log(users);
+
+    if (users.length) {
+        users.length = 3;
+    }
+    // এখানে if condition দেয়ার মানে হলো যাতে Falsy vlaue সেট না করে এবং ডাটা না পেলে empty value হিসেবে সেট করে।
+
+    // console.log(users)
+
     return (
         <div>
-            <Navbar></Navbar>
-            <section>
-                <div className='px-4 pt-20 pb-24 mx-auto max-w-7xl md:px-2'>
-                    <div className="h-full content-center">
+            <h1>Welcome to Sohag's IT Care</h1>
+            <div className=' grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2'>
 
-                        <h3 className=' text-3xl  text-center text-20 pb-4'> Welcome to <span className="font-bold italic">Sohag's IT Care</span></h3>
-
-                        <button className="py-1 px-3 text-white mt-3 mx-1 bg-cyan-600 w-auto sm:mb-0 rounded-full">Go to Details</button>
-                    </div>
-                </div >
-            </section>
-            <Footer></Footer>
+                {
+                    users.map(user => <SingleService
+                        key={user.id}
+                        user={user}></SingleService>)
+                }
+            </div>
+            <Link to="/services">Load More........</Link>
         </div>
     );
 };
