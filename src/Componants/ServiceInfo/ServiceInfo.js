@@ -30,7 +30,7 @@ const ServiceInfo = () => {
 
     return (
         <>
-            <Card style={{ width: '18rem' }}>
+            <Card className='my-10  w-50 py-2 mx-auto max-w-7xl'>
                 <Card.Img variant="top" src={serviceDetail?.image} />
                 <Card.Body>
                     <Card.Title>Card Title : {serviceDetail?.name}</Card.Title>
@@ -40,6 +40,7 @@ const ServiceInfo = () => {
                     <Button variant="primary">Go somewhere</Button>
                 </Card.Body>
             </Card>
+
         </>
     );
 };

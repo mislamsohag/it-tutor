@@ -19,8 +19,8 @@ const Home = () => {
 
     return (
         <div className='px-4 py-4 mx-auto max-w-7xl'>
-            <h1>Welcome to Sohag's IT Care</h1>
-            <div className=' grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+            <h1 className='mb-3 text-3xl text-center'>Welcome to <span className='text-blue-600'>Sohag's IT Care</span></h1>
+            <div className=' grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
 
                 {
                     users.map(user => <SingleService
