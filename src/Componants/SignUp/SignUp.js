@@ -111,19 +111,18 @@ const Signup = () => {
 
                     {errors?.password && <p className="error-message">{errors.password}</p>}
 
-                    <p className="absolute top-2 right-5" onClick={() => setShowPass(!showPass)}>🔥</p>
+                    <p className="absolute top-2 right-5" onClick={() => setShowPass(!showPass)}>👁</p>
                 </div>
 
-                <div className="mb-3">
-                    <input htmlFor="exampleInputPassword1" type="password" placeholder="confirm password" className="form-control"
-                        onChange={handleConfirmPasswordChange} />
+                <div className="relative">
+                    <div className="mb-3">
+                        <input type={showPass ? "text" : "password"} placeholder="confirm password" className="form-control" onChange={handleConfirmPasswordChange} />
+                    </div>
+
+                    <p className="absolute top-2 right-5" onClick={() => setShowPass(!showPass)}>👁</p>
                 </div>
 
                 <button className="btn btn-primary">Sign up</button>
-
-                {/* {error && <p className="error-message">{error}</p> } */}
-                {/* {hookError && <p className="error-message">{hookError?.message}</p>} */}
-
                 <ToastContainer />
             </form>
         </div>

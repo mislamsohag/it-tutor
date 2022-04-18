@@ -86,9 +86,9 @@ const Login = () => {
     }, [hookError, googleError])
 
     return (
-        <div className="container">
+        <div className="container w-50 mx-auto">
             <h2 className='text-3xl text-center my-2'>LOGIN</h2>
-            <form className="'w-50 mx-auto" onSubmit={handleLogin}>
+            <form onSubmit={handleLogin}>
 
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>

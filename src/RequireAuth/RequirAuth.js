@@ -11,7 +11,10 @@ const RequireAuth = ({ children }) => {
     const location = useLocation();
 
     if (loading) {
-        return <p>Loading</p>
+        return <div className="d-flex align-items-center">
+            <strong>Loading...</strong>
+            <div className="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+        </div>
     }
 
     if (user) {
