@@ -14,12 +14,12 @@ const Blogs = () => {
 
             </div>
             <div className='py-2'>
-                <h3 className='py-2 text-3xl font-bold'>What is Semantic tags?</h3>
-                <p>The HTML semantics refers to the tags that provide meaning to an HTML page rather than just presentation. Semantic HTML tags provide information about the contents of those tags that goes beyond just how they look on a page. Text that is enclosed in the tag is immediately recognized by the browser as some type of coding language. prefer to have your code samples display in the default browser style</p>
+                <h3 className='py-2 text-3xl font-bold'>What can i use firebase?</h3>
+                <p>Join Firebase at Google I/O 2022 live from Shoreline Amphitheatre and online May 11-12. Get the most out of the digital experience: build your schedule, earn Google Developer profile badges, keep track of what you learned after the event, and more.</p>
             </div>
 
             <div className='py-2'>
-                <h3 className='py-2 text-3xl font-bold '>Block and inline Block Element</h3>
+                <h3 className='py-2 text-3xl font-bold '>Whithout Authentication other Works</h3>
                 <p> Web browsers treat every element as a kind of box. brought a new way to create side by side boxes that collapse and wrap properly depending on the available space in the containing element.  However, CSS has two different types of boxes-block and inline. A block element always starts on a new line, and fills up the horizontal space left and right on the web page. display-block, a line break happens after the element, so a block element doesn’t sit next to other elements. Inline-block It makes layouts that were previously accomplished with floats easier to create. No need to clear floats anymore.</p>
             </div>
 
