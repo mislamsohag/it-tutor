@@ -9,6 +9,7 @@ import Blogs from './Componants/Blogs/Blogs';
 import Services from './Componants/Sevices/Services';
 import ServiceInfo from './Componants/ServiceInfo/ServiceInfo';
 import NotFound from './Componants/NotFound/NotFound';
+import RequirAuth from './RequireAuth/RequirAuth';
 
 
 function App() {
@@ -16,14 +17,20 @@ function App() {
     <div>
       <Header></Header>
       <Routes>
-        <Route path="/" element={<Home></Home>}></Route>
-        <Route path="/home" element={<Home></Home>}></Route>
-        <Route path="/services" element={<Services></Services>}></Route>
-        <Route path="/blogs" element={<Blogs></Blogs>}></Route>
-        <Route path="/about" element={<About></About>}></Route>
-        <Route path="/service/:serviceId" element={<ServiceInfo></ServiceInfo>}></Route>
-        <Route path="/login" element={<Login></Login>}></Route>
-        <Route path="*" element={<NotFound></NotFound>}></Route>
+        <Route path="/" element={<Home></Home>} />
+        <Route path="/home" element={<Home></Home>} />
+        <Route path="/services" element={<Services></Services>} />
+        <Route path="/blogs" element={<Blogs></Blogs>} />
+        <Route path="/about" element={<About></About>} />
+
+        <Route path='/service/:serviceId' element={
+          <RequirAuth>
+            <ServiceInfo></ServiceInfo>
+          </RequirAuth>
+        } />
+
+        <Route path="/login" element={<Login></Login>} />
+        <Route path="*" element={<NotFound></NotFound>} />
       </Routes>
       <Footer></Footer>
     </div>

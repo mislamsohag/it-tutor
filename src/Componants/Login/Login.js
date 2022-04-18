@@ -1,37 +1,125 @@
-import React from 'react';
+
+import { useEffect, useState } from 'react';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import auth from '../../Firebase/Firebase.init';
+import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { Form, Button } from 'react-bootstrap';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 
 const Login = () => {
+
+    const [login, setLogin] = useState([true])
+
+    const [confirmError, setConfirmError] = useState('');
+
+    const [userInfo, setUserInfo] = useState({
+        email: '',
+        password: '',
+        confirmPass: ''
+    })
+
+    //ইউজার তৈরি করার জন্য
+    const [
+        createUserWithEmailAndPassword,
+        createUser,
+        createLoading,
+        createError,
+    ] = useCreateUserWithEmailAndPassword(auth);
+
+    // লগইন করার জন্য
+    const [
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useSignInWithEmailAndPassword(auth);
+
+    //লগইন চেক করার জন্য
+    const [
+        loginUser,
+        loginLoading,
+        loginError
+    ] = useAuthState(auth);
+
+    const handleFormInput = (event) => {
+        userInfo[event.target.name] = event.target.value;
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+
+        if (!login) {
+
+            if (userInfo.password !== userInfo.confirmPass) {
+                setConfirmError("password cna't match");
+                return;
+            }
+            setConfirmError("")
+            createUserWithEmailAndPassword(userInfo.email, userInfo.password)
+        }
+        else {
+            signInWithEmailAndPassword(userInfo.email, userInfo.password)
+        }
+    }
+
+    let navigate = useNavigate();
+    let location = useLocation();
+    // let auth = useAuth();
+
+    let from = location.state?.from?.pathname || "/";
+
+    if (loginUser) {
+        navigate(from, { replace: true });
+    }
+
     return (
+        <>
+            <div className='container'>
+                <Form className='w-50 mx-auto' onSubmit={handleSubmit}>
 
-        <div className="p-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md sm:p-6 lg:p-8 dark:bg-gray-800 dark:border-gray-700">
-            <form className="space-y-6" action="#">
-                <h5 className="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h5>
-                <div>
-                    <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your email</label>
-                    <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required="" />
-                </div>
-                <div>
-                    <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your password</label>
-                    <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required="" />
-                </div>
-                <div className="flex items-start">
-                    <div className="flex items-start">
-                        <div className="flex items-center h-5">
-                            <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required="" />
-                        </div>
-                        <div className="ml-3 text-sm">
-                            <label for="remember" className="font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-                        </div>
+                    <h2 className='text-3xl text-center my-2'>
+                        {login ? "Login" : "Register"}
+                    </h2>
+
+                    <div className="mb-3">
+                        <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+                        <input onBlur={(event) => handleFormInput(event)} type="text" className="form-control" name='email' id="exampleInputEmail1" aria-describedby="emailHelp" />
+
                     </div>
-                    <a href="#" className="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
-                </div>
-                <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login to your account</button>
-                <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                    Not registered? <a href="#" className="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
-                </div>
-            </form>
-        </div>
 
+                    <div className="mb-3">
+                        <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                        <input onBlur={(event) => handleFormInput(event)} type="password" className="form-control" name='password' id="exampleInputPassword1" />
+                    </div>
+
+                    {
+                        !login && <div className="mb-3">
+                            <label htmlFor="exampleInputPassword1" className="form-label">Confirm Password</label>
+                            <input onBlur={(event) => handleFormInput(event)} type="password" className="form-control" name='confirmPass' id="exampleInputPassword1" />
+                        </div>
+                    }
+
+                    <div className="mb-3 form-check">
+                        <input type="checkbox" className="form-check-input" id="exampleCheck1" onChange={() => setLogin(!login)} />
+                        <label className="form-check-label" htmlFor="exampleCheck1">Check me for Registe or Login</label>
+                    </div>
+
+                    <Button type="submit" className="btn btn-primary">{login ? 'Login' : 'Register'}</Button>
+                    <p className='text-danger'>{confirmError}</p>
+                    {
+                        createError && <p className='text-danger'>{createError.message}</p>
+                    }
+                    {
+                        createUser && <p className='text-primaryr'>User Create Successfully</p>
+                    }
+                    {
+                        user && <p className='text-success'>User Login Successfully</p>
+                    }
+                </Form>
+            </div>
+        </>
     );
 };
 
