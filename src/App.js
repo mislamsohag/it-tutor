@@ -10,6 +10,9 @@ import Services from './Componants/Sevices/Services';
 import ServiceInfo from './Componants/ServiceInfo/ServiceInfo';
 import NotFound from './Componants/NotFound/NotFound';
 import RequirAuth from './RequireAuth/RequirAuth';
+import Signup from './Componants/Signup/Signup';
+
+
 
 
 function App() {
@@ -30,6 +33,7 @@ function App() {
         } />
 
         <Route path="/login" element={<Login></Login>} />
+        <Route path="/signup" element={<Signup></Signup>} />
         <Route path="*" element={<NotFound></NotFound>} />
       </Routes>
       <Footer></Footer>

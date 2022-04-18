@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import auth from "../../Firebase/Firebase.init";
-import "../../../styles/Login.css";
+
 
 const Signup = () => {
     const [userInfo, setUserInfo] = useState({
@@ -92,26 +92,38 @@ const Signup = () => {
     }, [user]);
 
     return (
-        <div className="login-container">
-            <div className="login-title">Sign up</div>
-            <form className="login-form" onSubmit={handleLogin}>
-                <input type="text" placeholder="Your Email" onChange={handleEmailChange} />
-                {errors?.email && <p className="error-message">{errors.email}</p>}
-                <div className="relative">
-                    <input type={showPass ? "text" : "password"} placeholder="password" onChange={handlePasswordChange} />
-                    {errors?.password && <p className="error-message">{errors.password}</p>}
-                    <p className="absolute top-3 right-5" onClick={() => setShowPass(!showPass)}>🔥</p>
-                </div>
-                <input
-                    type="password"
-                    placeholder="confirm password"
-                    onChange={handleConfirmPasswordChange}
-                />
+        <div className="container">
+            <div className='text-3xl text-center my-2'>Sign up</div>
+            <form className='w-50 mx-auto' onSubmit={handleLogin}>
 
-                <button>Sign up</button>
+                <div className="mb-3">
+                    <input type="text" placeholder="Your Email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={handleEmailChange} />
+                </div>
+
+
+                {errors?.email && <p className="error-message">{errors.email}</p>}
+
+                <div className="relative">
+
+                    <div className="mb-3">
+                        <input type={showPass ? "text" : "password"} placeholder="password" className="form-control" onChange={handlePasswordChange} />
+                    </div>
+
+                    {errors?.password && <p className="error-message">{errors.password}</p>}
+
+                    <p className="absolute top-2 right-5" onClick={() => setShowPass(!showPass)}>🔥</p>
+                </div>
+
+                <div className="mb-3">
+                    <input htmlFor="exampleInputPassword1" type="password" placeholder="confirm password" className="form-control"
+                        onChange={handleConfirmPasswordChange} />
+                </div>
+
+                <button className="btn btn-primary">Sign up</button>
 
                 {/* {error && <p className="error-message">{error}</p> } */}
                 {/* {hookError && <p className="error-message">{hookError?.message}</p>} */}
+
                 <ToastContainer />
             </form>
         </div>

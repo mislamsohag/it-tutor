@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ActiveLink from './../../ActiveLink/ActiveLink';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import auth from './../../../Firebase/Firebase.init';
+import auth from '../../../Firebase/Firebase.init';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 
