@@ -1,125 +1,123 @@
+import { useEffect, useState } from "react";
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import auth from "../../Firebase/Firebase.init";
 
-import { useEffect, useState } from 'react';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import auth from '../../Firebase/Firebase.init';
-import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { Form, Button } from 'react-bootstrap';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 const Login = () => {
-
-    const [login, setLogin] = useState([true])
-
-    const [confirmError, setConfirmError] = useState('');
-
     const [userInfo, setUserInfo] = useState({
-        email: '',
-        password: '',
-        confirmPass: ''
+        email: "",
+        password: "",
+    })
+    const [errors, setErrors] = useState({
+        email: "",
+        password: "",
+        general: "",
     })
 
-    //ইউজার তৈরি করার জন্য
-    const [
-        createUserWithEmailAndPassword,
-        createUser,
-        createLoading,
-        createError,
-    ] = useCreateUserWithEmailAndPassword(auth);
+    const [signInWithEmail, user, loading, hookError] = useSignInWithEmailAndPassword(auth);
+    const [signInWithGoogle, googleUser, loading2, googleError] = useSignInWithGoogle(auth);
 
-    // লগইন করার জন্য
-    const [
-        signInWithEmailAndPassword,
-        user,
-        loading,
-        error,
-    ] = useSignInWithEmailAndPassword(auth);
+    const handleEmailChange = (e) => {
+        const emailRegex = /\S+@\S+\.\S+/;
+        const validEmail = emailRegex.test(e.target.value);
 
-    //লগইন চেক করার জন্য
-    const [
-        loginUser,
-        loginLoading,
-        loginError
-    ] = useAuthState(auth);
+        if (validEmail) {
+            setUserInfo({ ...userInfo, email: e.target.value })
+            setErrors({ ...errors, email: "" })
+        } else {
+            setErrors({ ...errors, email: "Invalid email" })
+            setUserInfo({ ...userInfo, email: "" })
+        }
 
-    const handleFormInput = (event) => {
-        userInfo[event.target.name] = event.target.value;
+        // setEmail(e.target.value);
+    }
+    const handlePasswordChange = (e) => {
+        const passwordRegex = /.{6,}/;
+        const validPassword = passwordRegex.test(e.target.value);
+
+        if (validPassword) {
+            setUserInfo({ ...userInfo, password: e.target.value });
+            setErrors({ ...errors, password: "" });
+        } else {
+            setErrors({ ...errors, password: "Minimum 6 characters!" });
+            setUserInfo({ ...userInfo, password: "" })
+        }
+
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleLogin = (e) => {
+        e.preventDefault();
 
+        console.log(userInfo)
 
-        if (!login) {
+        signInWithEmail(userInfo.email, userInfo.password);
 
-            if (userInfo.password !== userInfo.confirmPass) {
-                setConfirmError("password cna't match");
-                return;
+    }
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+
+    useEffect(() => {
+        if (user) {
+            navigate(from);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        const error = hookError || googleError;
+        if (error) {
+            switch (error?.code) {
+                case "auth/invalid-email":
+                    toast("Invalid email provided, please provide a valid email");
+                    break;
+
+                case "auth/invalid-password":
+                    toast("Wrong password. Intruder!!")
+                    break;
+                default:
+                    toast("something went wrong")
             }
-            setConfirmError("")
-            createUserWithEmailAndPassword(userInfo.email, userInfo.password)
         }
-        else {
-            signInWithEmailAndPassword(userInfo.email, userInfo.password)
-        }
-    }
-
-    let navigate = useNavigate();
-    let location = useLocation();
-    // let auth = useAuth();
-
-    let from = location.state?.from?.pathname || "/";
-
-    if (loginUser) {
-        navigate(from, { replace: true });
-    }
+    }, [hookError, googleError])
 
     return (
-        <>
-            <div className='container'>
-                <Form className='w-50 mx-auto' onSubmit={handleSubmit}>
+        <div className="container">
+            <h2 className='text-3xl text-center my-2'>LOGIN</h2>
+            <form className="'w-50 mx-auto" onSubmit={handleLogin}>
 
-                    <h2 className='text-3xl text-center my-2'>
-                        {login ? "Login" : "Register"}
-                    </h2>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
 
-                    <div className="mb-3">
-                        <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                        <input onBlur={(event) => handleFormInput(event)} type="text" className="form-control" name='email' id="exampleInputEmail1" aria-describedby="emailHelp" />
+                    <input type="text" placeholder="Your Email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={handleEmailChange} />
+                </div>
 
-                    </div>
+                {errors?.email && <p className="text-danger">{errors.email}</p>}
 
-                    <div className="mb-3">
-                        <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                        <input onBlur={(event) => handleFormInput(event)} type="password" className="form-control" name='password' id="exampleInputPassword1" />
-                    </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
 
-                    {
-                        !login && <div className="mb-3">
-                            <label htmlFor="exampleInputPassword1" className="form-label">Confirm Password</label>
-                            <input onBlur={(event) => handleFormInput(event)} type="password" className="form-control" name='confirmPass' id="exampleInputPassword1" />
-                        </div>
-                    }
+                    <input type="password" placeholder="password" className="form-control" id="exampleInputPassword1" onChange={handlePasswordChange} />
+                </div>
 
-                    <div className="mb-3 form-check">
-                        <input type="checkbox" className="form-check-input" id="exampleCheck1" onChange={() => setLogin(!login)} />
-                        <label className="form-check-label" htmlFor="exampleCheck1">Check me for Registe or Login</label>
-                    </div>
+                {errors?.password && <p className="text-danger">{errors.password}</p>}
 
-                    <Button type="submit" className="btn btn-primary">{login ? 'Login' : 'Register'}</Button>
-                    <p className='text-danger'>{confirmError}</p>
-                    {
-                        createError && <p className='text-danger'>{createError.message}</p>
-                    }
-                    {
-                        createUser && <p className='text-primaryr'>User Create Successfully</p>
-                    }
-                    {
-                        user && <p className='text-success'>User Login Successfully</p>
-                    }
-                </Form>
-            </div>
-        </>
+                <button className="btn btn-primary">Login</button>
+
+                {/* {error && <p className="error-message">{error}</p> } */}
+                {/* {hookError && <p className="error-message">{hookError?.message}</p>} */}
+
+                <ToastContainer />
+
+                <p className="text-danger">Don't have an account? <Link to="/signup"><span className="text-primary">Sign up first </span></Link> </p>
+            </form>
+
+            <button className="btn btn-success" onClick={() => signInWithGoogle()}> Sign in Google</button>
+        </div>
     );
 };
 
